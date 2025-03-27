@@ -1,0 +1,14 @@
+<div class="weather-widget">
+    <h3>Météo</h3>
+    <div class="weather-content">
+        <img id="currentSeasonImage" src="{{ asset('build/images/' ~ serverTime.currentSeason ~ '.png') }}" alt="{{ serverTime.currentSeason }}">
+        <p id="seasonText">{{ serverTime.currentSeason }}</p>
+        <p>Date: <span id="serverTime">{{ serverTime.serverTime }}</span></p>
+        <img id="currentDay" src="{{ asset('build/images/' ~ (serverTime.isDay ? 'day' : 'night') ~ '.png') }}" alt="{{ serverTime.isDay ? 'jour' : 'nuit' }}">
+        <p id="textDay">{{ serverTime.isDay ? 'Jour' : 'Nuit' }}</p>
+        <img id="weatherImage" src="{{ asset('build/images/' ~ serverTime.weather ~ '.png') }}" alt="{{ serverTime.weather }}">
+        <p id="weather">{{ serverTime.weather }}</p>
+        <p>Température: <span id="temperature">{{ serverTime.temperature }}</span>°C</p>
+        </div>
+    </div>
+</div>

@@ -13,10 +13,10 @@ class ServerTimeService
     private const DAYS_IN_SEASON = 90;
 
     private array $weatherCoefficients = [
-        'Hiver' => ['soleil' => 2, 'pluie' => 3, 'neige' => 5, 'brouillard' => 2, 'minTemp' => -10, 'maxTemp' => 5],
-        'Printemps' => ['soleil' => 6, 'pluie' => 3, 'neige' => 0, 'brouillard' => 1, 'minTemp' => 5, 'maxTemp' => 15],
-        'Eté' => ['soleil' => 8, 'pluie' => 2, 'neige' => 0, 'brouillard' => 0, 'minTemp' => 15, 'maxTemp' => 30],
-        'Automne' => ['soleil' => 4, 'pluie' => 4, 'neige' => 1, 'brouillard' => 3, 'minTemp' => 0, 'maxTemp' => 10]
+        'hiver' => ['soleil' => 2, 'pluie' => 3, 'neige' => 5, 'brouillard' => 2, 'minTemp' => -10, 'maxTemp' => 5],
+        'printemps' => ['soleil' => 6, 'pluie' => 3, 'neige' => 0, 'brouillard' => 1, 'minTemp' => 5, 'maxTemp' => 15],
+        'ete' => ['soleil' => 8, 'pluie' => 2, 'neige' => 0, 'brouillard' => 0, 'minTemp' => 15, 'maxTemp' => 30],
+        'automne' => ['soleil' => 4, 'pluie' => 4, 'neige' => 1, 'brouillard' => 3, 'minTemp' => 0, 'maxTemp' => 10]
     ];
 
     public function __construct()
@@ -71,7 +71,7 @@ class ServerTimeService
         $serverDayOfYear = date('z', $serverTime) + 1; // Day of the year (1-365)
         $seasonNumber = ceil($serverDayOfYear / self::DAYS_IN_SEASON);
 
-        $seasons = ['Hiver', 'Printemps', 'Eté', 'Automne'];
+        $seasons = ['hiver', 'printemps', 'ete', 'automne'];
         $currentSeason = $seasons[($seasonNumber - 1) % 4];
 
         // Determine if it is day or night
@@ -162,10 +162,10 @@ class ServerTimeService
     private function generateDayNight(string $season, int $hour): bool
     {
         return match ($season) {
-            'Hiver' => ($hour >= 8 && $hour < 17),
-            'Printemps' => ($hour >= 6.5 && $hour < 20),
-            'Eté' => ($hour >= 5.5 && $hour < 21.5),
-            'Automne' => ($hour >= 7 && $hour < 18.5),
+            'hiver' => ($hour >= 8 && $hour < 17),
+            'printemps' => ($hour >= 6.5 && $hour < 20),
+            'ete' => ($hour >= 5.5 && $hour < 21.5),
+            'automne' => ($hour >= 7 && $hour < 18.5),
             default => false,
         };
     }

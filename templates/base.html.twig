@@ -26,11 +26,19 @@
                     </div>
         {% endfor %}
         {% endfor %}
-        <main>
-            <div class="content-wrapper">
-        {% block body %}{% endblock %}
-            </div>
-        </main>
+        <div class="main-container">
+            <aside class="sidebar">
+                {% block sidebar %}
+                    {{ render(controller('App\\Controller\\MeteoController::index')) }}
+                {% endblock %}
+            </aside>
+            
+            <main class="main-content">
+                <div class="content-wrapper">
+                {% block body %}{% endblock %}
+                </div>
+            </main>
+        </div>
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         <script src=" https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>    
