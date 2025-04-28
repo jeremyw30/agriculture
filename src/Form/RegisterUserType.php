@@ -106,6 +106,11 @@ class RegisterUserType extends AbstractType
                     'entityClass' => User::class,
                     'fields' => ['email'],
                 'message' => 'Cette adresse email est déjà utilisée.'
+                ]),
+                new UniqueEntity([
+                    'entityClass' => User::class,
+                    'fields' => ['surname'],
+                'message' => 'Ce pseudo est déjà utilisée.'
                     ])
                 ],
             'data_class' => User::class,
