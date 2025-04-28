@@ -1,88 +1,155 @@
+/* ==========================================
+   Corps de page général
+========================================== */
 body {
-    font-family: "Roboto", sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-  }
+  font-family: "Roboto", sans-serif; /* Utilise la police Roboto ; sinon sans-serif par défaut */
+  margin: 0; /* Supprime les marges par défaut du navigateur */
+  padding: 0; /* Supprime les paddings par défaut */
+  background-color: #f4f4f4; /* Fond gris très clair pour un aspect doux */
+  color: #333; /* Couleur du texte gris foncé pour une bonne lisibilité */
+}
 
- header {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
- }
- 
- .header-logo img {
- width: 120px;
- height: auto;
+/* ==========================================
+ Bannière d'en-tête
+========================================== */
+#banner {
+  position: relative; /* Permet de positionner le logo de manière absolue */
+  background-size: cover; /* L'image de fond couvre toute la zone sans déformation */
+  background-position: center; /* Centre l'image dans la bannière */
+  background-repeat: no-repeat; /* Empêche la répétition de l'image */
+  height: 300px; /* Hauteur fixe de la bannière */
+}
 
+/* ==========================================
+ Logo principal dans la bannière
+========================================== */
+.logo-principale {
+  height: 250px; /* Fixe la taille du logo */
+  position: absolute; /* Positionne le logo par rapport à la bannière */
+  top: 50%; /* Centre verticalement */
+  left: 50%; /* Centre horizontalement */
+  transform: translate(-50%, -50%); /* Ajuste précisément pour centrer le logo */
+}
 
- }
+/* ==========================================
+ Deuxième barre de navigation
+========================================== */
+.navbar-second {
+  background-color: rgb(157, 171, 126); /* Couleur verte naturelle */
+}
 
-  .navbar-first {
-    height: 342px;
-    align-items: start !important;
-  }
-  
- .navbar-second {
-  background-color:#897f39;
- }
+.logo-navbar{
+  height: 50px; /* Fixe la taille du logo */
+}
+/* ==========================================
+ Conteneur de la navbar
+========================================== */
+nav .container-fluid {
+  width: 90%; /* Réduit la largeur à 90% pour éviter que la navbar touche les bords */
+  margin: 0 auto; /* Centre horizontalement le conteneur */
+}
 
-  nav .container-fluid {
-    width: 80%;
-    margin: 0 auto;
-  }
-  
-  .navbar-brand {
-    font-size: 24px;
-  }
-  
-  .nav-item {
-    font-family: "Work Sans", sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 0.6px;
-    margin-left: 60px;
-  }
-  
-  .dropdown-menu .nav-link {
-    margin-left: 30px;
-  }
-  
-  .main-container {
-    display: flex;
-    width: 100%;
-  }
-  .sidebar {
-    width: 15%;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    min-height: 100vh;
-  }
-  .main-content {
-    width: 85%;
-  }
-  
-  .weather-widget {
-    background-color: white;
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  .weather-widget h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    color: #333;
-  }
-  .weather-location {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  .weather-main {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
+/* ==========================================
+ Marque ou logo textuel de la navbar
+========================================== */
+.navbar-brand {
+  font-size: 24px; /* Taille du texte du logo/marque plus grande */
+}
+
+/* ==========================================
+ Liens dans la navbar
+========================================== */
+.nav-item {
+  font-family: "Work Sans", sans-serif; /* Utilise une autre police pour les liens */
+  font-size: 16px; /* Taille de texte moyenne */
+  font-weight: bold; /* Texte en gras pour mieux attirer l'attention */
+  letter-spacing: 0.6px; /* Espacement léger entre les lettres pour respirer */
+  margin-left: 60px; /* Marge entre chaque lien pour espacer */
+}
+
+/* ==========================================
+ Liens dans les menus déroulants (dropdown)
+========================================== */
+.dropdown-menu .nav-link {
+  margin-left: 30px; /* Espace à gauche pour aligner mieux les sous-liens */
+}
+
+/* ==========================================
+ Conteneur principal (sidebar + contenu)
+========================================== */
+.main-container {
+
+  display: flex; /* Affiche les enfants (sidebar et contenu) en ligne */
+  width: 100%; /* Prend toute la largeur disponible */
+}
+
+/* ==========================================
+ Barre latérale gauche
+========================================== */
+.sidebar {
+  width: 15%; /* Sidebar prend 15% de la largeur totale */
+  padding: 1rem; /* Padding intérieur pour respirer */
+  background-color: #f8f9fa; /* Fond gris clair */
+  min-height: 100vh; /* Hauteur minimum = hauteur de l'écran */
+}
+
+/* ==========================================
+ Image de profil utilisateur
+========================================== */
+.users {
+  filter: brightness(0); /* Rend l'image totalement noire (filtre CSS) */
+  height: 50px; /* Fixe la hauteur de l'icône de profil, force avec !important */
+}
+
+/* ==========================================
+ Contenu principal à droite de la sidebar
+========================================== */
+.main-content {
+  width: 85%; /* Le contenu principal prend 85% de la largeur totale */
+}
+
+/* ==========================================
+ Widget météo (carte météo dans la sidebar)
+========================================== */
+.weather-widget {
+  background-color:rgb(157, 171, 126); /* Fond vert naturel pour rappeler l'agriculture */
+  border-radius: 8px; /* Bords légèrement arrondis */
+  padding: 12px; /* Espacement intérieur autour du contenu */
+  margin-bottom: 20px; /* Marge sous chaque widget */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Petite ombre douce autour du widget */
+}
+
+/* ==========================================
+ Titre du widget météo
+========================================== */
+.weather-widget h3 {
+  margin-top: 0; /* Supprime la marge en haut du titre */
+  margin-bottom: 10px; /* Ajoute un espace sous le titre */
+  font-size: 1.2rem; /* Taille du titre en rem (relative) */
+  color: #333; /* Texte gris foncé pour lisibilité */
+}
+
+/* ==========================================
+ Localisation météo
+========================================== */
+.weather-location {
+  font-weight: bold; /* Met en gras la localisation pour la mettre en valeur */
+  margin-bottom: 5px; /* Petit espace sous la localisation */
+}
+
+/* ==========================================
+ Section principale de la météo (température + icône)
+========================================== */
+.weather-main {
+  display: flex; /* Affiche les éléments côte à côte */
+  align-items: center; /* Centre verticalement les éléments */
+  justify-content: space-between; /* Met la température d'un côté et l'icône de l'autre */
+  margin-bottom: 10px; /* Marge sous la météo principale */
+}
+
+/* ==========================================
+ Items de menu déroulant
+========================================== */
+.dropdown-item {
+  background-color: red; /* Fond rouge pour tous les items du dropdown (attention, peut être à adapter) */
+}

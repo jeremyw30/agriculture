@@ -8,8 +8,9 @@ use Exception;
 
 class ServerTimeService
 {
-    private const REAL_TO_SERVER_RATIO = 3; // 1 real day = 3 server days
-    private const DAYS_IN_MONTH = 30;
+    private const REAL_TO_SERVER_RATIO = 3; // 1 real day   = 3 server days
+    
+ const DAYS_IN_MONTH = 30;
     private const DAYS_IN_SEASON = 90;
 
     private array $weatherCoefficients = [
