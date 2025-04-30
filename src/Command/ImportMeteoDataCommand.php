@@ -29,8 +29,9 @@ class ImportMeteoDataCommand extends Command
     {
         $this
             ->setDescription('Imports meteorological data from JSON file')
-            ->addOption('file', null, InputOption::VALUE_OPTIONAL, 'Path to the JSON file', 'assets/data/meteo-gavray-2024.json');
-    }
+            ->addOption('file', null, InputOption::VALUE_OPTIONAL, 'Path to the JSON file', 'assets/data/meteo-gavray-2024.json')
+            ->setName('app:import-meteo-data');
+        }
 
     protected function execute(InputInterface $input, OutputInterface $output):int
     {
