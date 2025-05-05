@@ -1,74 +1,51 @@
+<?php
+
 namespace App\Entity;
 
+use App\Repository\MeteoDataRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\MeteoDataRepository")
- * @ORM\Table(name="meteo_data")
- */
+#[ORM\Entity(repositoryClass: MeteoDataRepository::class)]
+#[ORM\Table(name: 'meteo_data')]
 class MeteoData
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $date = null;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $temperature;
+    #[ORM\Column(type: 'float')]
+    private ?float $temperature = null;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $feels_like;
+    #[ORM\Column(type: 'float')]
+    private ?float $feels_like = null;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $humidity;
+    #[ORM\Column(type: 'float')]
+    private ?float $humidity = null;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $wind_speed;
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $wind_speed = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $wind_direction;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $wind_direction = null;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $pressure;
+    #[ORM\Column(type: 'float')]
+    private ?float $pressure = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $precipitation_type;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $precipitation_type = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $weather;
+    #[ORM\Column(type: 'string')]
+    private ?string $weather = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $summary;
+    #[ORM\Column(type: 'string')]
+    private ?string $summary = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $cloud_cover;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $cloud_cover = null;
 
     public function getId(): ?int
     {
@@ -80,7 +57,7 @@ class MeteoData
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
         return $this;
@@ -91,7 +68,7 @@ class MeteoData
         return $this->temperature;
     }
 
-    public function setTemperature(float $temperature): self
+    public function setTemperature(float $temperature): static
     {
         $this->temperature = $temperature;
         return $this;
@@ -102,7 +79,7 @@ class MeteoData
         return $this->feels_like;
     }
 
-    public function setFeelsLike(float $feels_like): self
+    public function setFeelsLike(float $feels_like): static
     {
         $this->feels_like = $feels_like;
         return $this;
@@ -113,7 +90,7 @@ class MeteoData
         return $this->humidity;
     }
 
-    public function setHumidity(float $humidity): self
+    public function setHumidity(float $humidity): static
     {
         $this->humidity = $humidity;
         return $this;
@@ -124,7 +101,7 @@ class MeteoData
         return $this->wind_speed;
     }
 
-    public function setWindSpeed(?float $wind_speed): self
+    public function setWindSpeed(?float $wind_speed): static
     {
         $this->wind_speed = $wind_speed;
         return $this;
@@ -135,7 +112,7 @@ class MeteoData
         return $this->wind_direction;
     }
 
-    public function setWindDirection(?string $wind_direction): self
+    public function setWindDirection(?string $wind_direction): static
     {
         $this->wind_direction = $wind_direction;
         return $this;
@@ -146,7 +123,7 @@ class MeteoData
         return $this->pressure;
     }
 
-    public function setPressure(float $pressure): self
+    public function setPressure(float $pressure): static
     {
         $this->pressure = $pressure;
         return $this;
@@ -157,7 +134,7 @@ class MeteoData
         return $this->precipitation_type;
     }
 
-    public function setPrecipitationType(?string $precipitation_type): self
+    public function setPrecipitationType(?string $precipitation_type): static
     {
         $this->precipitation_type = $precipitation_type;
         return $this;
@@ -168,7 +145,7 @@ class MeteoData
         return $this->weather;
     }
 
-    public function setWeather(string $weather): self
+    public function setWeather(string $weather): static
     {
         $this->weather = $weather;
         return $this;
@@ -179,7 +156,7 @@ class MeteoData
         return $this->summary;
     }
 
-    public function setSummary(string $summary): self
+    public function setSummary(string $summary): static
     {
         $this->summary = $summary;
         return $this;
@@ -190,7 +167,7 @@ class MeteoData
         return $this->cloud_cover;
     }
 
-    public function setCloudCover(?int $cloud_cover): self
+    public function setCloudCover(?int $cloud_cover): static
     {
         $this->cloud_cover = $cloud_cover;
         return $this;
