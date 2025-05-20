@@ -9,6 +9,10 @@ body {
   color: #333; /* Couleur du texte gris foncé pour une bonne lisibilité */
 }
 
+.btn-agri {
+  background-color: rgb(157, 171, 126);
+}
+
 /* ==========================================
  Bannière d'en-tête
 ========================================== */
@@ -152,4 +156,31 @@ nav .container-fluid {
 ========================================== */
 .dropdown-item {
   background-color: red; /* Fond rouge pour tous les items du dropdown (attention, peut être à adapter) */
+}
+
+/* ==========================================
+ radio bouton choisir zone-inscription
+========================================== */
+.radio-custom-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.radio-custom + label {
+    margin-right: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.radio-custom:checked + label {
+    background-color: #f0f7ff;
+    border-color: #4a90e2;
+}
+
+.installation {
+  margin: 30px auto;
+
+
 }

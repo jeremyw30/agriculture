@@ -47,6 +47,9 @@ class MeteoData
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $cloud_cover = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $zone = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -170,6 +173,18 @@ class MeteoData
     public function setCloudCover(?int $cloud_cover): static
     {
         $this->cloud_cover = $cloud_cover;
+        return $this;
+    }
+
+    public function getZone(): ?string
+    {
+        return $this->zone;
+    }
+
+    public function setZone(string $zone): static
+    {
+        $this->zone = $zone;
+
         return $this;
     }
 }

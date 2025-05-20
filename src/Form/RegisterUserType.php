@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class RegisterUserType extends AbstractType
 {
@@ -89,10 +90,28 @@ class RegisterUserType extends AbstractType
             'invalid_message' => 'Les mots de passe ne correspondent pas',
             'mapped' => false,
         ])
-
+        ->add('zone', ChoiceType::class, [
+            'label' => 'Zone d\'activité',
+            'required' => true,
+            'expanded' => true, // Afficher comme boutons radio
+            'multiple' => false, // Une seule sélection possible
+            'choices' => [
+                'Autun - Région montagneuse en Bourgogne-Franche-Comté' => 'autun',
+                'Gavray - Commune en Normandie, climat océanique' => 'gavray',
+            ],
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Veuillez choisir une zone d\'activité.'
+        ])
+            ],
+            'label_attr' => ['class' => 'radio-custom-label'],
+            'choice_attr' => function() {
+                return ['class' => 'radio-custom'];
+            },
+        ])
         
         ->add('submit', SubmitType::class, [
-            'label' => 'Inscription', 'attr' => ['class' => 'btn-inscrire btn ']
+            'label' => 'Inscription', 'attr' => ['class' => ' btn btn-agri ']
         ])  
 
         ;
