@@ -90,21 +90,22 @@ class RegisterUserType extends AbstractType
             'invalid_message' => 'Les mots de passe ne correspondent pas',
             'mapped' => false,
         ])
+        
         ->add('zone', ChoiceType::class, [
-            'label' => 'Zone d\'activité',
+            'label' => 'Choisissez votre région de départ',
             'required' => true,
             'expanded' => true, // Afficher comme boutons radio
             'multiple' => false, // Une seule sélection possible
             'choices' => [
-                'Autun - Région montagneuse en Bourgogne-Franche-Comté' => 'autun',
-                'Gavray - Commune en Normandie, climat océanique' => 'gavray',
+                'autun' => 'autun',
+                'gavray' => 'gavray',
             ],
             'constraints' => [
                 new NotBlank([
-                    'message' => 'Veuillez choisir une zone d\'activité.'
-        ])
+                    'message' => 'Veuillez choisir une région de départ.'
+                ])
             ],
-            'label_attr' => ['class' => 'radio-custom-label'],
+            'label_attr' => ['class' => 'h4 mb-3'],
             'choice_attr' => function() {
                 return ['class' => 'radio-custom'];
             },

@@ -1,13 +1,100 @@
 <div class="weather-widget">
-    <h3>Météo</h3>
-    <div class="weather-content">
-        <img id="currentSeasonImage" src="{{ asset('build/images/' ~ serverTime.currentSeason ~ '.png') }}" alt="{{ serverTime.currentSeason }}">
-        <p id="seasonText">{{ serverTime.currentSeason }}</p>
-        <p>Date: <span id="serverTime">{{ serverTime.serverTime }}</span></p>
-        <img id="currentDay" src="{{ asset('build/images/' ~ (serverTime.isDay ? 'day' : 'night') ~ '.png') }}" alt="{{ serverTime.isDay ? 'jour' : 'nuit' }}">
-        <p id="textDay">{{ serverTime.isDay ? 'Jour' : 'Nuit' }}</p>
-        <img id="weatherImage" src="{{ asset('build/images/' ~ serverTime.weather ~ '.png') }}" alt="{{ serverTime.weather }}">
-        <p id="weather">{{ serverTime.weather }}</p>
-        <p>Température: <span id="temperature">{{ serverTime.temperature }}</span>°C</p>
+    <div class="weather-header">
+        <h3 class="weather-location">{{ zone|capitalize }}</h3>
+        <div class="weather-time">{{ serverTime.formattedDateTime }}</div>
     </div>
+    
+    {% if meteoData %}
+        <div class="weather-main">
+            <div class="weather-summary">
+                <div class="weather-icon">
+            {% set isNight = serverTime.hour < 6 or serverTime.hour >= 20 %}
+            
+            {% if meteoData.precipitationType %}
+                <i class="fas fa-cloud-rain"></i>
+            {% elseif meteoData.cloudCover > 80 %}
+                <i class="fas fa-cloud"></i>
+            {% elseif meteoData.cloudCover > 50 %}
+                {% if isNight %}
+                    <i class="fas fa-cloud-moon"></i>
+                {% else %}
+                    <i class="fas fa-cloud-sun"></i>
+                {% endif %}
+            {% else %}
+                {% if isNight %}
+                    <i class="fas fa-moon"></i>
+                {% else %}
+                    <i class="fas fa-sun"></i>
+                {% endif %}
+            {% endif %}
+        </div>
+                <div class="weather-temp">{{ meteoData.temperature }}°C</div>
+                {% if isNight %}
+                    <div class="weather-night">Nuit</div>
+                {% else %}
+                    <div class="weather-desc">{{ meteoData.summary }}</div>
+                {% endif %}
+                
+            
+            
+            <ul class="weather-details">
+                <li>
+                    <span class="weather-label">Ressenti</span>
+                    <span class="weather-value">{{ meteoData.feelsLike }}°C</span>
+                </li>
+                <li>
+                    <span class="weather-label">Humidité</span>
+                    <span class="weather-value">{{ meteoData.humidity }}%</span>
+                </li>
+                <li>
+                    <span class="weather-label">Vent</span>
+                    <span class="weather-value">{{ meteoData.windSpeed }} km/h</span>
+                </li>
+                <li>
+                    <span class="weather-label">Pression</span>
+                    <span class="weather-value">{{ meteoData.pressure }} hPa</span>
+                </li>
+                <li>
+                    <span class="weather-label">Nuages</span>
+                    <span class="weather-value">{{ meteoData.cloudCover }}%</span>
+                </li>
+                {% if meteoData.precipitationType %}
+                <li>
+                    <span class="weather-label">Précipitation</span>
+                    <span class="weather-value">
+                        {% set precipitationFr = '' %}
+                        {% if meteoData.precipitationType == 'none' %}
+                            {% set precipitationFr = 'non' %}
+                        {% elseif meteoData.precipitationType == 'rain' %}
+                            {% set precipitationFr = 'pluie' %}
+                        {% elseif meteoData.precipitationType == 'snow' %}
+                            {% set precipitationFr = 'neige' %}
+                        {% elseif meteoData.precipitationType == 'sleet' %}
+                            {% set precipitationFr = 'grésil' %}
+                        {% elseif meteoData.precipitationType == 'hail' %}
+                            {% set precipitationFr = 'grêle' %}
+                        {% elseif meteoData.precipitationType == 'drizzle' %}
+                            {% set precipitationFr = 'bruine' %}
+                        {% elseif meteoData.precipitationType == 'thunderstorm' %}
+                            {% set precipitationFr = 'orage' %}
+                        {% elseif meteoData.precipitationType == 'shower' %}
+                            {% set precipitationFr = 'averse' %}
+                        {% elseif meteoData.precipitationType == 'mist' %}
+                        {% set precipitationFr = 'brume' %}
+                        {% elseif meteoData.precipitationType == 'fog' %}
+                            {% set precipitationFr = 'brouillard' %}
+                        {% else %}
+                            {% set precipitationFr = meteoData.precipitationType %}
+                        {% endif %}
+                        {{ precipitationFr }}
+                    </span>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="weather-error">
+            Données météo non disponibles pour le moment.
+        </div>
+    {% endif %}
 </div>
