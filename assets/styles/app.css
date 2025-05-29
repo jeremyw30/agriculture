@@ -1,3 +1,6 @@
+:root {
+    --bs-dropdown-bg: rgb(157, 171, 126) !important;
+}
 /* ==========================================
    Corps de page général
 ========================================== */
@@ -44,6 +47,7 @@ body {
 
 .logo-navbar{
   height: 50px; /* Fixe la taille du logo */
+  filter: grayscale(100%) brightness(0);
 }
 /* ==========================================
  Conteneur de la navbar
@@ -76,6 +80,13 @@ nav .container-fluid {
 ========================================== */
 .dropdown-menu .nav-link {
   margin-left: 30px; /* Espace à gauche pour aligner mieux les sous-liens */
+}
+
+.dropdown-menu {
+--bs-dropdown-bg: rgb(157, 171, 126) !important;
+
+    background-color: rgb(157, 171, 126) !important;
+
 }
 
 /* ==========================================
@@ -116,7 +127,7 @@ nav .container-fluid {
  Titre du widget météo
 ========================================== */
 .weather-widget {
-  background: linear-gradient(to bottom, #4a8fe7, #83b4f9);
+  background: linear-gradient(to bottom,rgb(157, 171, 126), #83b4f9);
   color: white;
   border-radius: 12px;
   padding: 15px;
@@ -206,7 +217,7 @@ nav .container-fluid {
  Items de menu déroulant
 ========================================== */
 .dropdown-item {
-  background-color: red; /* Fond rouge pour tous les items du dropdown (attention, peut être à adapter) */
+  background-color: rgb(157, 171, 126); /* Fond rouge pour tous les items du dropdown (attention, peut être à adapter) */
 }
 
 /* ==========================================
