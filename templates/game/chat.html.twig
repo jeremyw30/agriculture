@@ -1,0 +1,302 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat du Jeu - Agriculture{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.chat-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #f8f9fa;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.chat-tabs {
+    display: flex;
+    background: #343a40;
+}
+
+.chat-tab {
+    padding: 15px 20px;
+    background: #495057;
+    color: white;
+    cursor: pointer;
+    border: none;
+    flex: 1;
+    transition: background 0.3s;
+}
+
+.chat-tab.active {
+    background: #007bff;
+}
+
+.chat-tab:hover {
+    background: #0056b3;
+}
+
+.chat-content {
+    height: 400px;
+    overflow-y: auto;
+    padding: 15px;
+    background: white;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 70%;
+}
+
+.message.normal {
+    background: #e9ecef;
+    margin-left: 0;
+}
+
+.message.whisper {
+    background: #f8d7da;
+    border-left: 4px solid #dc3545;
+    font-style: italic;
+}
+
+.message-sender {
+    font-weight: bold;
+    color: #495057;
+    font-size: 0.9em;
+}
+
+.message-time {
+    color: #6c757d;
+    font-size: 0.8em;
+    float: right;
+}
+
+.message-content {
+    margin-top: 5px;
+    color: #212529;
+}
+
+.chat-input {
+    display: flex;
+    padding: 15px;
+    background: #f8f9fa;
+    gap: 10px;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    outline: none;
+}
+
+.chat-input input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.chat-input button:hover {
+    background: #0056b3;
+}
+
+.chat-commands {
+    padding: 10px 15px;
+    background: #e9ecef;
+    font-size: 0.9em;
+    color: #6c757d;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="chat-container">
+    <!-- Onglets de chat -->
+    <div class="chat-tabs">
+        <button class="chat-tab active" data-room-id="{{ globalRoom.id }}" data-room-type="global">
+            💬 Chat Global
+        </button>
+        <button class="chat-tab" id="private-chat-tab" style="display: none;">
+            🔒 Privé
+        </button>
+    </div>
+
+    <!-- Zone des messages -->
+    <div class="chat-content" id="chat-messages">
+        <div class="text-center text-muted">
+            Chargement des messages...
+        </div>
+    </div>
+
+    <!-- Zone de saisie -->
+    <div class="chat-input">
+        <input type="text" id="message-input" placeholder="Tapez votre message..." maxlength="500">
+        <button type="button" id="send-button">Envoyer</button>
+    </div>
+
+    <!-- Commandes disponibles -->
+    <div class="chat-commands">
+        <strong>Commandes:</strong>
+        /whisper [utilisateur] [message] - Message privé
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+class GameChat {
+    constructor() {
+        this.currentRoomId = {{ globalRoom.id }};
+        this.currentUsername = 'Joueur_' + Math.floor(Math.random() * 1000);
+        this.eventSource = null;
+        
+        this.initializeElements();
+        this.bindEvents();
+        this.loadMessages();
+        this.setupMercure();
+    }
+
+    initializeElements() {
+        this.chatTabs = document.querySelectorAll('.chat-tab');
+        this.messagesContainer = document.getElementById('chat-messages');
+        this.messageInput = document.getElementById('message-input');
+        this.sendButton = document.getElementById('send-button');
+    }
+
+    bindEvents() {
+        // Onglets de chat
+        this.chatTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const roomId = e.target.dataset.roomId;
+                if (roomId) {
+                    this.switchRoom(roomId);
+                    this.setActiveTab(e.target);
+                }
+            });
+        });
+
+        // Envoi de message
+        this.sendButton.addEventListener('click', () => this.sendMessage());
+        this.messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.sendMessage();
+            }
+        });
+    }
+
+    setActiveTab(activeTab) {
+        this.chatTabs.forEach(tab => tab.classList.remove('active'));
+        activeTab.classList.add('active');
+    }
+
+    switchRoom(roomId) {
+        this.currentRoomId = roomId;
+        this.loadMessages();
+        this.setupMercure();
+    }
+
+    async loadMessages() {
+        try {
+            const response = await fetch(`/game/chat/messages/${this.currentRoomId}`);
+            const messages = await response.json();
+            
+            this.messagesContainer.innerHTML = '';
+            messages.forEach(message => this.displayMessage(message));
+            this.scrollToBottom();
+        } catch (error) {
+            console.error('Erreur lors du chargement des messages:', error);
+        }
+    }
+
+    async sendMessage() {
+        const message = this.messageInput.value.trim();
+        if (!message) return;
+
+        try {
+            const response = await fetch(`/game/chat/send/${this.currentRoomId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    message: message,
+                    username: this.currentUsername
+                })
+            });
+
+            if (response.ok) {
+                this.messageInput.value = '';
+            } else {
+                alert('Erreur lors de l\'envoi du message');
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+    }
+
+    displayMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${message.type}`;
+        
+        messageDiv.innerHTML = `
+            <div class="message-sender">
+                ${message.sender}
+                <span class="message-time">${message.timestamp}</span>
+            </div>
+            <div class="message-content">${this.escapeHtml(message.content)}</div>
+        `;
+        
+        this.messagesContainer.appendChild(messageDiv);
+        this.scrollToBottom();
+    }
+
+    scrollToBottom() {
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    setupMercure() {
+        if (this.eventSource) {
+            this.eventSource.close();
+        }
+
+        const url = new URL('http://localhost:3000/.well-known/mercure');
+        url.searchParams.append('topic', `/game/chat/${this.currentRoomId}`);
+        
+        this.eventSource = new EventSource(url);
+        
+        this.eventSource.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            this.displayMessage(message);
+        };
+
+        this.eventSource.onerror = (error) => {
+            console.error('Erreur Mercure:', error);
+        };
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new GameChat();
+});
+</script>
+{% endblock %}

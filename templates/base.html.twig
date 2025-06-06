@@ -7,6 +7,79 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        
+        <!-- Chat Button Styles -->
+        <style>
+        .chat-float-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-float-button:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,123,255,0.6);
+        }
+
+        .chat-float-button i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .chat-notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .chat-float-button.minimized {
+            opacity: 0.7;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .chat-float-button {
+                bottom: 15px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+            }
+            
+            .chat-float-button i {
+                font-size: 20px;
+            }
+        }
+        </style>
         {% endblock %}
         {% block meta %}
         <meta charset="UTF-8">
@@ -39,9 +112,86 @@
                 </div>
             </main>
         </div>
+
+        <!-- Floating Chat Button -->
+        <button class="chat-float-button" id="chat-float-btn" title="Ouvrir le chat">
+            <i class="fas fa-comments"></i>
+            <span class="chat-notification-badge" id="chat-notification" style="display: none;">0</span>
+        </button>
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-        <script src=" https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>    
+        <script src=" https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+        
+        <!-- Chat Button JavaScript -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatButton = document.getElementById('chat-float-btn');
+            const notificationBadge = document.getElementById('chat-notification');
+            let unreadMessages = 0;
+
+            // Click handler for chat button
+            chatButton.addEventListener('click', function() {
+                // Open chat in new window/tab or modal
+                //const chatWindow = window.open('/game/chat', 'ChatWindow', 'width=900,height=700,scrollbars=yes,resizable=yes');
+                
+                // Alternative: Open in same page
+                 window.location.href = '/game/chat';
+                
+                // Reset notification count when chat is opened
+                resetNotificationCount();
+                
+                if (chatWindow) {
+                    chatWindow.focus();
+                }
+            });
+
+            // Function to update notification count
+            function updateNotificationCount(count) {
+                unreadMessages = count;
+                if (count > 0) {
+                    notificationBadge.textContent = count > 99 ? '99+' : count;
+                    notificationBadge.style.display = 'flex';
+                } else {
+                    notificationBadge.style.display = 'none';
+                }
+            }
+
+            // Function to reset notification count
+            function resetNotificationCount() {
+                updateNotificationCount(0);
+            }
+
+            // Listen for messages from chat window (if using popup)
+            window.addEventListener('message', function(event) {
+                if (event.data.type === 'newChatMessage') {
+                    unreadMessages++;
+                    updateNotificationCount(unreadMessages);
+                }
+            });
+
+            // Optionally connect to Mercure for real-time notifications
+            // This would require proper Mercure setup
+            /*
+            function setupChatNotifications() {
+                const url = new URL('http://localhost:3000/.well-known/mercure');
+                url.searchParams.append('topic', '/game/chat/notifications');
+                
+                const eventSource = new EventSource(url);
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'new_message') {
+                        unreadMessages++;
+                        updateNotificationCount(unreadMessages);
+                    }
+                };
+            }
+            
+            // Uncomment to enable real-time notifications
+            // setupChatNotifications();
+            */
+        });
+        </script>    
         {% endblock %}
         {%  include "base/footer.html.twig" %}
     </body>

@@ -1,4 +1,6 @@
 <?php
+
+
 // src/Controller/GameChatController.php
 
 namespace App\Controller;
@@ -19,32 +21,22 @@ class GameChatController extends AbstractController
     #[Route('/game/chat', name: 'game_chat_interface')]
     public function chatInterface(EntityManagerInterface $em): Response
     {
-        // Récupérer les différentes rooms disponibles
+        // Récupérer la room globale
         $globalRoom = $em->getRepository(ChatRoom::class)->findOneBy(['type' => 'global']);
-        $tradeRoom = $em->getRepository(ChatRoom::class)->findOneBy(['type' => 'trade']);
        
-        // Créer les rooms par défaut si elles n'existent pas
+        // Créer la room globale si elle n'existe pas
         if (!$globalRoom) {
             $globalRoom = new ChatRoom();
             $globalRoom->setName('Chat Global')
                       ->setType('global')
-                      ->setMaxUsers(1000);
+                      ->setMaxUsers(1000)
+                      ->setIsActive(true);
             $em->persist($globalRoom);
+            $em->flush();
         }
-       
-        if (!$tradeRoom) {
-            $tradeRoom = new ChatRoom();
-            $tradeRoom->setName('Commerce')
-                     ->setType('trade')
-                     ->setMaxUsers(500);
-            $em->persist($tradeRoom);
-        }
-       
-        $em->flush();
 
         return $this->render('game/chat.html.twig', [
             'globalRoom' => $globalRoom,
-            'tradeRoom' => $tradeRoom,
         ]);
     }
 
@@ -96,12 +88,23 @@ class GameChatController extends AbstractController
 
         // Filtrage des commandes de chat
         $messageType = 'normal';
-        if (str_starts_with($content, '/trade ')) {
-            $messageType = 'trade';
-            $content = substr($content, 7); // Enlever "/trade "
-        } elseif (str_starts_with($content, '/whisper ')) {
+        
+        if (str_starts_with($content, '/whisper ')) {
             $messageType = 'whisper';
-            // Logique pour whisper...
+            $parts = explode(' ', $content, 3);
+            
+            if (count($parts) < 3) {
+                return new JsonResponse(['error' => 'Usage: /whisper [utilisateur] [message]'], 400);
+            }
+            
+            $targetUser = $parts[1];
+            $content = $parts[2];
+            
+            // Create or find private room for whisper
+            $privateRoom = $this->getOrCreatePrivateRoom($targetUser, $sender, $em);
+            if ($privateRoom) {
+                $room = $privateRoom;
+            }
         }
 
         $message = new Message();
@@ -116,14 +119,14 @@ class GameChatController extends AbstractController
 
         // Publication via Mercure
         $update = new Update(
-            "/game/chat/{$roomId}",
+            "/game/chat/{$room->getId()}",
             json_encode([
                 'id' => $message->getId(),
                 'content' => $message->getContent(),
                 'sender' => $message->getSender(),
                 'timestamp' => $message->getTimestamp()->format('H:i:s'),
                 'type' => $messageType,
-                'roomId' => $roomId
+                'roomId' => $room->getId()
             ])
         );
         $hub->publish($update);
@@ -157,11 +160,42 @@ class GameChatController extends AbstractController
         $privateRoom->setName("Chat privé: {$currentUser} & {$targetUser}")
                    ->setType('private')
                    ->setAllowedUsers([$currentUser, $targetUser])
-                   ->setMaxUsers(2);
+                   ->setMaxUsers(2)
+                   ->setIsActive(true);
 
         $em->persist($privateRoom);
         $em->flush();
 
         return new JsonResponse(['roomId' => $privateRoom->getId()]);
+    }
+
+    private function getOrCreatePrivateRoom(string $targetUser, string $currentUser, EntityManagerInterface $em): ?ChatRoom
+    {
+        // Check if private room already exists
+        $existingRoom = $em->getRepository(ChatRoom::class)->createQueryBuilder('r')
+            ->where('r.type = :type')
+            ->andWhere('(JSON_CONTAINS(r.allowedUsers, :users1) = 1 OR JSON_CONTAINS(r.allowedUsers, :users2) = 1)')
+            ->setParameter('type', 'private')
+            ->setParameter('users1', json_encode([$currentUser, $targetUser]))
+            ->setParameter('users2', json_encode([$targetUser, $currentUser]))
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($existingRoom) {
+            return $existingRoom;
+        }
+
+        // Create new private room
+        $privateRoom = new ChatRoom();
+        $privateRoom->setName("Chat privé: {$currentUser} & {$targetUser}")
+                   ->setType('private')
+                   ->setAllowedUsers([$currentUser, $targetUser])
+                   ->setMaxUsers(2)
+                   ->setIsActive(true);
+
+        $em->persist($privateRoom);
+        $em->flush();
+
+        return $privateRoom;
     }
 }
