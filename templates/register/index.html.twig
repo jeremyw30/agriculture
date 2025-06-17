@@ -5,16 +5,7 @@
     <div class="form-wrapper col-md-6 offset-md-3">
         <h1 class="text-center">Inscription</h1>
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-         <div class="form-group">
-                {{ form_label(form.lastname) }}
-                {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.lastname) }}
-            </div>
-             <div class="form-group">
-                {{ form_label(form.firstname) }}
-                {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.firstname) }}
-            </div>
+        
             <div class="form-group">
                 {{ form_label(form.surname) }}
                 {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}

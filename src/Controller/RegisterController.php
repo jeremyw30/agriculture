@@ -22,6 +22,7 @@ final class RegisterController extends AbstractController
                     $user = $form->getData();
                     $user->setRoles(['ROLE_USER']);
                     $user->setCreatedAt(new \DateTimeImmutable());
+                    $user->setBalance(100000);
                     //figer les don
                     $entityManagerInterface->persist($user);
                     //envoyer les données
