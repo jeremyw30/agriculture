@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Parcelle;
+use App\Entity\UserMachine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Parcelle>
+ * @extends ServiceEntityRepository<UserMachine>
  */
-class ParcelleRepository extends ServiceEntityRepository
+class UserMachineRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Parcelle::class);
+        parent::__construct($registry, UserMachine::class);
     }
 
     //    /**
-    //     * @return Parcelle[] Returns an array of Parcelle objects
+    //     * @return UserMachine[] Returns an array of UserMachine objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
+    //        return $this->createQueryBuilder('u')
+    //            ->andWhere('u.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
+    //            ->orderBy('u.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Parcelle
+    //    public function findOneBySomeField($value): ?UserMachine
     //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
+    //        return $this->createQueryBuilder('u')
+    //            ->andWhere('u.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

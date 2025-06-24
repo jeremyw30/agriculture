@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Parcelle;
+use App\Entity\UserBatiment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Parcelle>
+ * @extends ServiceEntityRepository<UserBatiment>
  */
-class ParcelleRepository extends ServiceEntityRepository
+class UserBatimentRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Parcelle::class);
+        parent::__construct($registry, UserBatiment::class);
     }
 
     //    /**
-    //     * @return Parcelle[] Returns an array of Parcelle objects
+    //     * @return UserBatiment[] Returns an array of UserBatiment objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
+    //        return $this->createQueryBuilder('u')
+    //            ->andWhere('u.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
+    //            ->orderBy('u.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Parcelle
+    //    public function findOneBySomeField($value): ?UserBatiment
     //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
+    //        return $this->createQueryBuilder('u')
+    //            ->andWhere('u.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

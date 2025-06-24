@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Parcelle;
+use App\Entity\ParcelleActivities;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Parcelle>
+ * @extends ServiceEntityRepository<ParcelleActivities>
  */
-class ParcelleRepository extends ServiceEntityRepository
+class ParcelleActivitiesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Parcelle::class);
+        parent::__construct($registry, ParcelleActivities::class);
     }
 
     //    /**
-    //     * @return Parcelle[] Returns an array of Parcelle objects
+    //     * @return ParcelleActivities[] Returns an array of ParcelleActivities objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ParcelleRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Parcelle
+    //    public function findOneBySomeField($value): ?ParcelleActivities
     //    {
     //        return $this->createQueryBuilder('p')
     //            ->andWhere('p.exampleField = :val')

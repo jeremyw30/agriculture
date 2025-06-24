@@ -36,14 +36,13 @@ class CreateAdminUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $user = new User();
-        $user->setFirstname('Admin');
-        $user->setLastname('Admin');
         $user->setSurname("admin");
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setZone("gavray");
         $user->setEmail('admin@admin.com');
         $user->setPassword($this->passwordHasher->hashPassword($user, '123456'));
         $user->setRoles(['ROLE_ADMIN']);
+        $user->setBalance(1);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
