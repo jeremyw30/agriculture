@@ -35,7 +35,7 @@ class UserMachine
     private ?User $id_user = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'id_machine', referencedColumnName: 'id_machine', nullable: false)]
     private ?Machine $id_machine = null;
 
     /**

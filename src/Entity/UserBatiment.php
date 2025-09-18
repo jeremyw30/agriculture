@@ -32,7 +32,7 @@ class UserBatiment
     private ?User $idUser = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'id_batiment', referencedColumnName: 'id_batiment', nullable: false)]
     private ?Batiment $idBatiment = null;
 
     /**

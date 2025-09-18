@@ -38,6 +38,7 @@ class Transaction
     private ?AnimalActivities $idAnimalActivity = null;
 
     #[ORM\ManyToOne(inversedBy: 'transactions')]
+    #[ORM\JoinColumn(name: 'id_hotel_vente', referencedColumnName: 'Id_hotel_ventes', nullable: true)]
     private ?HotelVentes $idHotelVente = null;
 
     #[ORM\ManyToOne(inversedBy: 'transactions')]

@@ -29,7 +29,7 @@ class UserAnimal
     private ?User $idUser = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'id_animal', referencedColumnName: 'id_animal', nullable: false)]
     private ?Animal $idAnimal = null;
 
     #[ORM\ManyToOne(inversedBy: 'userAnimals')]
